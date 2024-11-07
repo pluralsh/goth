@@ -260,7 +260,7 @@ defmodule Goth do
 
   defp handle_retry(exception, %{retries: retries, max_retries: max_retries} = state) when retries >= max_retries - 1 do
     Logger.error("too many failed attempts to refresh, last error: #{inspect(exception)}")
-    {:noreply, %{state | retries: 0}}
+    {:stop, {:shutdown, exception}, %{state | retries: 0}}
   end
 
   defp handle_retry(_, state) do
